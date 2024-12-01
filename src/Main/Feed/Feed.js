@@ -11,7 +11,7 @@ const Feed = () =>{
 
     useEffect(()=> {
                                   //   console.log("ye call gye",i++);
-      fetch("http://localhost:3500/get-all-posts")
+      fetch("https://tweet-app-backend.onrender.com/get-all-posts")
       .then(res => res.json())
       .then(data => {
         console.log(data);

@@ -46,7 +46,7 @@ const TweetBox = () =>{
       function handleTweet(e){
           e.preventDefault();
           if(user?.providerData[0]?.providerId === "password"){
-            fetch(`http://localhost:3500/loggedInUser?email=${email}`)
+            fetch(`https://tweet-app-backend.onrender.com/loggedInUser?email=${email}`)
             .then(res => res.json())
             .then(data => {
               setName(data?.name)
@@ -75,7 +75,7 @@ const TweetBox = () =>{
           setPost("");
           setImageURL("");
 
-          fetch(`http://localhost:3500/create-post`,{
+          fetch(`https://tweet-app-backend.onrender.com/create-post`,{
             method: "POST",
             headers: {
               'content-type': 'application/json'

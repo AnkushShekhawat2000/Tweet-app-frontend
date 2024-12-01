@@ -27,6 +27,7 @@ const Signup = () => {
       setError("");
 
     try{
+           await signin(email, password);
 
             const user = {
             username: username,
@@ -36,7 +37,7 @@ const Signup = () => {
             }
 
 
-          const response = await fetch("http://localhost:3500/register" , {
+          const response = await fetch("https://tweet-app-backend.onrender.com/register" , {
             method : "POST",
             headers : {
                 'content-type' : "application/json"
@@ -50,7 +51,7 @@ const Signup = () => {
            }
 
            const data = await response.json();
-           await signin(email, password);
+          
            navigate("/");
 
         } catch(err){

@@ -80,7 +80,7 @@ const Editprofile = ({ user, loggedinuser }) => {
       website,
       dob,
     };
-    fetch(`http://localhost:3500/userupdate/${user?.email}`, {
+    fetch(`https://tweet-app-backend.onrender.com/userupdate/${user?.email}`, {
       method: "PATCH",
       headers: {
         "content-type": "application/json",
@@ -91,6 +91,9 @@ const Editprofile = ({ user, loggedinuser }) => {
       .then((data) => {
         console.log("done", data);
       });
+
+
+      setopen(false);
   };
   return (
     <div>
@@ -113,7 +116,7 @@ const Editprofile = ({ user, loggedinuser }) => {
               <CloseIcon />
             </IconButton>
             <h2 className="header-title">Edit Profile</h2>
-            <button className="save-btn" onClick={handlesave}>Save</button>
+            <button className="save-btn" onClick={handlesave} >Save</button>
           </div>
           <form className="fill-content">
             <TextField
