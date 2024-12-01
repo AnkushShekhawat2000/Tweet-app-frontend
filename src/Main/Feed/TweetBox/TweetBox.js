@@ -8,7 +8,7 @@ import useLoggedInUser from "../../../hooks/useLoggedInUser";
 
 
 const TweetBox = () =>{
-
+  
     const [name, setName] = useState("");
     const [username, setUsername] = useState("");
     const [post, setPost] = useState("");
@@ -17,10 +17,12 @@ const TweetBox = () =>{
     const {user} =  useUserauth();
     const [loggedInUser] = useLoggedInUser();
     const email = user?.email
-    const userProfilepic =  loggedInUser[0] ?.profileImage 
-    ? loggedInUser[0].profileImage
+    const userProfilepic =  loggedInUser?.profilePhoto 
+    ? loggedInUser.profilePhoto
     : user && user.photoURL ;
-    
+   
+
+    // console.log("user => ", user)
       function handleUploadImage(e){
 
         setIsLoading(true);
@@ -43,19 +45,14 @@ const TweetBox = () =>{
 
       function handleTweet(e){
           e.preventDefault();
-
-          if(user?.providerData[0]?.provideId === "password"){
+          if(user?.providerData[0]?.providerId === "password"){
             fetch(`http://localhost:3500/loggedInUser?email=${email}`)
             .then(res => res.json())
             .then(data => {
-              console.log('from useLoggedinuser', data)
-              setName(data[0]?.name)
-              setUsername(data[0]?.username)
+              setName(data?.name)
+              setUsername(data?.username)
             })
           } else{
-
-            console.log(user);
-            console.log("elese vhla");
             setName(user?.displayName);
             setUsername(email?.split("@")[0]);
           }
@@ -66,7 +63,7 @@ const TweetBox = () =>{
 
           if(name){
             const userPost = {
-              profile: userProfilepic,
+              profilePhoto: userProfilepic,
               postBody: post,
               postImage: imageURL,
               username: username,
@@ -89,10 +86,6 @@ const TweetBox = () =>{
           .then(data => {
             console.log(data);
           })
-
-
-          
-
         }
       }  
         
@@ -103,7 +96,12 @@ const TweetBox = () =>{
         <div className="tweetBox">
            <form onSubmit={handleTweet}>
              <div className="tweetBox-input">
-                <Avatar src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577900_960_720.png"/>
+                <Avatar src= {
+                    loggedInUser?.profilePhoto
+                  ? loggedInUser.profilePhoto
+                  : user && user.photoURL
+                 } 
+                />
                 <input 
                 type="text"
                 placeholder="What's happening?"

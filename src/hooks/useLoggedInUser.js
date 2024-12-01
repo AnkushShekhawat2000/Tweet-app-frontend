@@ -5,7 +5,7 @@ const useLoggedInUser = () => {
     const {user} = useUserauth();
     const email = user?.email;
 
-    console.log("loggedInUser=>", email, "    uuuuu", user);
+    // console.log("loggedInUser=>", email, "    uuuuu", user);
     const [loggedInUser, setLoggedInUser] = useState({});
 
     useEffect(() => {
@@ -17,7 +17,6 @@ const useLoggedInUser = () => {
             })
     }, [email])
 
-    console.log("loggedInUser=>", loggedInUser);
 
 
     return [loggedInUser, setLoggedInUser];

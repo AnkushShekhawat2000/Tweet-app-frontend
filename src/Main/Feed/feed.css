@@ -1,3 +1,29 @@
-.feed{
 
-}
+  .post-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 5px;
+    overflow-y: scroll;
+    max-height: 1000px;
+    background-color:rgb(230, 236, 240);
+    
+  }
+  
+  .post-container::-webkit-scrollbar {
+    width: 0px; 
+    height: 0px; 
+  }
+  
+
+  .post-container::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+  
+  .post {
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  

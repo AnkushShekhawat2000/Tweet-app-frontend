@@ -1,10 +1,15 @@
-import "../Page.css"
-const Profile = () =>{
-    return (
-        <div className="page">
-           <h2 className="page_title">Welcome to Profile</h2>
-        </div>
-    )
-}
+import React from "react";
+import "../Page.css";
+import Mainprofile from "./Mainprofile/MainProfile";
+import { useUserauth } from "../../context/UserAuthContext"
+const Profile = () => {
+  const { user } = useUserauth();
 
-export default Profile
+  return (
+    <div className="profilePage">
+      <Mainprofile user={user} />
+    </div>
+  );
+};
+
+export default Profile;

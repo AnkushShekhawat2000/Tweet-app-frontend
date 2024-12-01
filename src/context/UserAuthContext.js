@@ -25,8 +25,10 @@ export function UserauthcontextProvider({children}){
     }
 
     function logout(){
-        return signOut(auth);
+        return signOut(auth)
+        
     }
+
 
     function googlesignin(){
         const googleauthprovider = new GoogleAuthProvider();
@@ -42,6 +44,7 @@ export function UserauthcontextProvider({children}){
             Unsubscribe();
         }
     });
+
     return (
         <userAuthcontext.Provider value={{user, login, signin, logout, googlesignin}}>
             {children}

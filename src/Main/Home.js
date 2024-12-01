@@ -11,15 +11,15 @@ const Home = () =>{
     const {logout, user} = useUserauth();
     const navigate = useNavigate();
 
-
-    const handleLogout = async () =>{ 
-       try{
-        await logout();
-        navigate("/login");
-       } catch(error){
-        console.log(error.message);
-       }
-    }
+    const handleLogout = async () => { 
+        try {
+          const response = await logout();
+          console.log('Logout response:', response); // Log the response to check if it's valid
+          navigate("/login");
+        } catch (error) {
+          console.log(error.message);
+        }
+     }
     return(
         <div className="app">
             <Sidebar handleLogout={handleLogout} user={user}/>

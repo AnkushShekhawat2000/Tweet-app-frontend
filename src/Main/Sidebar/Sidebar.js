@@ -24,7 +24,7 @@ const Sidebar = ({handleLogout, user}) =>{
     const openMenu = Boolean(anchorEl);
     const [loggedInUser] = useLoggedInUser();
 
-    console.log("logged in user in sidebar =>", loggedInUser);
+    // console.log("logged in user in sidebar =>", loggedInUser);
 
     const handleClick = (e) =>{
         setAnchorEl(e.currentTarget);
@@ -34,14 +34,14 @@ const Sidebar = ({handleLogout, user}) =>{
         setAnchorEl(null);
     }
 
-    const result = user.email?.split("@")[0];
-    console.log(result);
+    const result = user?.email?.split("@")[0] || "Guest";
+    // console.log(result);
 
     return (
         <div className="sidebar">
             <TwitterIcon className="sidebar-twitterIcon"/>
 
-            <CustomeLink to="/home/feed">
+            <CustomeLink to="/home">
               <SidebarOptions active Icon={HomeIcon} text="Home"/> 
             </CustomeLink>
            
@@ -80,11 +80,10 @@ const Sidebar = ({handleLogout, user}) =>{
 
             <div className="Profile-info">
                <Avatar src={
-                 loggedInUser[0] ?.profileImage 
-                 ? loggedInUser[0].profileImage
-                 /* : user && user.photoURL */
-                 : "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577900_960_720.png"
-
+                 loggedInUser?.profilePhoto
+                 ? loggedInUser?.profilePhoto
+                  : user && user.photoURL 
+                 
                } />
     
                <div className="user-info subUser-info">
@@ -141,7 +140,7 @@ const Sidebar = ({handleLogout, user}) =>{
                   </MenuItem>
                   <Divider/>
                   <MenuItem onClick={handleClose}>Add an existing account</MenuItem>
-                  <MenuItem onClick={handleLogout}>Log out @{result}</MenuItem>
+                  <MenuItem onClick={handleLogout}>Log out @{}</MenuItem>
               </Menu>
     
             </div>

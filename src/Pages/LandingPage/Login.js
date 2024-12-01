@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+
 import { Link, useNavigate } from "react-router-dom";
 import GoogleButton from "react-google-button";
 import twitterImg from "../../image/twitter.jpeg";
 import TwitterIcon from '@mui/icons-material/Twitter';
 import { useUserauth } from "../../context/UserAuthContext";
 import "./LandingPage.css"
+import auth from "../../firebase.init"
 
 
 const Login = () => {
@@ -14,34 +17,17 @@ const Login = () => {
     const navigate = useNavigate();
     const {googlesignin} = useUserauth();
     const {login} = useUserauth();
-    // const [signInWithEmailAndPassword,user,loading,error] = useSignInWithEmailAndPassword(auth);
-    // const [signInWithGoogle, googleUser, googleLoading, googleError] = useSignInWithGoogle(auth);
 
-    // if(user || googleUser){
-    //     navigate("/");
-    //     console.log(user);
-    //     console.log(googleUser);
-    // }
-
-    // if(user){
-    //     console.log(user);
-    // }
-
-    // if(error){
-    //     console.log(error.message);
-    // }
-    
-    // if(loading){
-    //     console.log("loading....");
-    // }
-
+    console.log("data => ", email);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
 
         try{
+                                 // console.log(email, password);
             await login(email, password);
+                                  // console.log("Login Successful");
             navigate("/");
         }
         catch(err){
@@ -49,21 +35,22 @@ const Login = () => {
             window.alert(error);
         }
 
-         
-
-    //    console.log(email, password);
-    //    signInWithEmailAndPassword(email, password);
     };
 
-    const  handleGoogleSignIn = async(e) =>{
-        e.preventDefault();
-        try{
-          await googlesignin();
-          navigate("/");
-        } catch(error){
-          console.log(error.message);
-        }
-      }
+   
+const handleGoogleSignIn = async (e) => {
+    e.preventDefault();
+    const provider = new GoogleAuthProvider(); // Initialize Google Auth Provider
+  
+    try {
+      const result = await signInWithPopup(auth, provider); // Google Sign-In
+      // Navigate to the dashboard
+      navigate("/");
+    } catch (error) {
+      console.log("Google Sign-In Error:", error.message);
+    }
+  };
+  
     return (
         <>
             <div className="login-container">

@@ -9,12 +9,11 @@ import "./Posts.css";
 
 
 const Post = ({p}) => {
+   console.log(p);
 
-    const {name , username, photo, post, profilePhoto} = p;
+    const {name , username, postImage, postBody, profilePhoto} = p;
 
-
-    console.log(p);
-
+   //  console.log(username);
    
     return (
         <div className="post">
@@ -31,11 +30,11 @@ const Post = ({p}) => {
                         </span>
                      </div>
                      <div className="post__headerDescription">
-                        <p>{post}</p>
+                        <p>{postBody}</p>
                      </div>
                   </div>
 
-                  <img src={photo} alt="" width="500" />
+                  <img src={postImage} alt="" width="500" />
 
                   <div className="post__footer">
                      <ChatBubbleOutlineIcon className="post__footer__icon" fontSize="small" />

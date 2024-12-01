@@ -24,10 +24,10 @@ function App() {
       <BrowserRouter>
          <Routes>    
             <Route path="/" element={<Home/>}>
-               <Route index path="/feed" element={<Feed/>}/>
+                 <Route index element={<Feed />} />
             </Route>
             <Route path="/home" element={<ProtectedRoute><Home/></ProtectedRoute>}>
-               <Route index path="feed" element={<Feed/>}/>
+               <Route index  element={<Feed />} /> 
                <Route path="explore" element={<Explore/>}/>
                <Route path="notifications" element={<Notifications/>}/>
                <Route path="messages" element={<Messages/>}/>
