@@ -80,7 +80,7 @@ const Editprofile = ({ user, loggedInUser: loggedinuser, setProfileUser }) => {
       website,
       dob,
     };
-    fetch(`https://tweet-app-backend.onrender.com/userupdate/${user?.email}`, {
+    fetch(`${process.env.REACT_APP_BASE_URL}/userupdate/${user?.email}`, {
       method: "PATCH",
       headers: {
         "content-type": "application/json",

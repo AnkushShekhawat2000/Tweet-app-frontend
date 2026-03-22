@@ -14,7 +14,7 @@ const Home = () =>{
     const handleLogout = async () => { 
         try {
           const response = await logout();
-          console.log('Logout response:', response); // Log the response to check if it's valid
+          console.log('Logout response:', response); 
           navigate("/login");
         } catch (error) {
           console.log(error.message);

@@ -31,7 +31,7 @@ const Mainprofile = ({ user }) => {
 
 
   useEffect(() => {
-    fetch(`https://tweet-app-backend.onrender.com/userpost?email=${user?.email}`)
+    fetch(`${process.env.REACT_APP_BASE_URL}/userpost?email=${user?.email}`)
       .then((res) => res.json())
       .then((data) => {
         setpost(data);
@@ -62,7 +62,7 @@ const Mainprofile = ({ user }) => {
         setisloading(false);
 
         if (url) {
-          fetch(`https://tweet-app-backend.onrender.com/userupdate/${user?.email}`, {
+          fetch(`${process.env.REACT_APP_BASE_URL}/userupdate/${user?.email}`, {
             method: "PATCH",
             headers: {
               "content-type": "application/json",
@@ -107,7 +107,7 @@ const Mainprofile = ({ user }) => {
         };
         setisloading(false);
         if (url) {
-          fetch(`https://tweet-app-backend.onrender.com/userupdate/${user?.email}`, {
+          fetch(`${process.env.REACT_APP_BASE_URL}/userupdate/${user?.email}`, {
             method: "PATCH",
             headers: {
               "content-type": "application/json",

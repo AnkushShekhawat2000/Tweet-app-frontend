@@ -15,6 +15,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import DoneIcon from "@mui/icons-material/Done"
 import CustomeLink from "./CustomeLink.js";
 import useLoggedInUser from "../../hooks/useLoggedInUser.js";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -23,6 +24,7 @@ const Sidebar = ({handleLogout, user}) =>{
     const [anchorEl, setAnchorEl] =  useState(null);
     const openMenu = Boolean(anchorEl);
     const [loggedInUser] = useLoggedInUser();
+    const navigate = useNavigate();
 
     // console.log("logged in user in sidebar =>", loggedInUser);
 
@@ -65,6 +67,7 @@ const Sidebar = ({handleLogout, user}) =>{
             <SidebarOptions active Icon={ListAltIcon} text="Lists"/>
             </CustomeLink>
 
+
             <CustomeLink to="/home/profile">
              <SidebarOptions active Icon={PermIdentityIcon} text="Profile"/>
             </CustomeLink>
@@ -79,7 +82,10 @@ const Sidebar = ({handleLogout, user}) =>{
             </Button>
 
             <div className="Profile-info">
-               <Avatar src={
+               <Avatar 
+                onClick={() => navigate("/home/profile")}
+                     sx={{ cursor: "pointer" }}
+               src={
                  loggedInUser?.profilePhoto
                  ? loggedInUser?.profilePhoto
                   : user && user.photoURL 
@@ -91,7 +97,7 @@ const Sidebar = ({handleLogout, user}) =>{
                         {
                             loggedInUser?.name 
                             ? loggedInUser.name
-                            : user && user.displayName
+                            : user && user?.displayName
                         }
                  </h4>
                   <h5>@{result}</h5>
@@ -129,7 +135,7 @@ const Sidebar = ({handleLogout, user}) =>{
                             {
                                 loggedInUser?.name 
                                 ? loggedInUser.name
-                                : user && user.displayName
+                                : user && user?.displayName
                             }
                             </h4>
                             <h5>@{result}</h5>

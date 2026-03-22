@@ -2,25 +2,23 @@ import { useEffect, useState } from "react";
 import { useUserauth } from "../context/UserAuthContext";
 
 const useLoggedInUser = () => {
-    const {user} = useUserauth();
-    const email = user?.email;
+  const { user } = useUserauth();
+  const email = user?.email;
 
-    // console.log("loggedInUser=>", email, "    uuuuu", user);
-    const [loggedInUser, setLoggedInUser] = useState({});
+  const [loggedInUser, setLoggedInUser] = useState({});
 
-    useEffect(() => {
-        fetch(`https://tweet-app-backend.onrender.com/loggedInUser?email=${email}`)
-            .then(res => res.json())
-            .then(data => {
-                console.log('from useLoggedinuser', data)
-                setLoggedInUser(data)
-            })
-    }, [email])
+  useEffect(() => {
+    if (!email) return;
 
+    fetch(`${process.env.REACT_APP_BASE_URL}/loggedInUser?email=${email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setLoggedInUser(data);
+      })
+      .catch((err) => console.log(err));
+  }, [email]);
 
+  return [loggedInUser, setLoggedInUser];
+};
 
-    return [loggedInUser, setLoggedInUser];
-}
-
-export default useLoggedInUser
-
+export default useLoggedInUser;
