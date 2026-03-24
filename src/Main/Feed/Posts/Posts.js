@@ -6,16 +6,25 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import PublishIcon from "@mui/icons-material/Publish";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 
 import { useState } from "react";
 
 import "./Posts.css";
 import "./editModel.css";
+import useLoggedInUser from "../../../hooks/useLoggedInUser";
 
 const Post = ({ p, onDelete, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editBody, setEditBody] = useState(p.postBody);
   const [editImage, setEditImage] = useState(p.postImage || null);
+  const [isFollowing, setIsFollowing] = useState(p.isFollowing);
+  const [isLiked, setIsLiked] = useState(p.isLiked);
+  const [isBookmarked, setIsBookmarked] = useState(p.isBookmarked);
+  const [likeCount, setLikeCount] = useState(p.likeCount);
+  const [loggedInUser] = useLoggedInUser();
+  const loggedInUserEmail = loggedInUser.email;
 
   const { name, username, postImage, postBody, profilePhoto, _id } = p;
 
@@ -28,36 +37,174 @@ const Post = ({ p, onDelete, onUpdate }) => {
     setIsEditing(false);
   };
 
-const handleImageChange = async (e) => {
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
 
-  const file = e.target.files[0];
+    if (!file) return;
 
-  if (!file) return;
+    try {
+      const formData = new FormData();
+      formData.set("image", file);
 
-  try {
-   
-    const formData = new FormData();
-    formData.set("image", file);
+      const res = await fetch(
+        "https://api.imgbb.com/1/upload?key=22741e46a20f61109c000473abeaac5b",
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
 
-    const res = await fetch(
-      "https://api.imgbb.com/1/upload?key=22741e46a20f61109c000473abeaac5b",
-      {
-        method: "POST",
-        body: formData,
+      const data = await res.json();
+
+      setEditImage(data.data.display_url);
+
+      console.log("Uploaded Image URL:", data.data.display_url);
+    } catch (error) {
+      console.error("Image upload error:", error);
+    }
+  };
+
+  const handleFollow = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/follow/follow-user`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            followingUserId: p.userId,
+            followerUserId: loggedInUser._id,
+          }),
+        },
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setIsFollowing(true);
+      } else {
+        console.error(data.message);
       }
-    );
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-    const data = await res.json();
+  const handleUnfollow = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/follow/unfollow-user`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            followingUserId: p.userId,
+            followerUserId: loggedInUser._id,
+          }),
+        },
+      );
 
-   
-    setEditImage(data.data.display_url);
+      const data = await res.json();
 
-    console.log("Uploaded Image URL:", data.data.display_url);
+      if (res.ok) {
+        setIsFollowing(false);
+      } else {
+        console.error(data.message);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-  } catch (error) {
-    console.error("Image upload error:", error);
-  }
-};
+  const handleLike = async () => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/like`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          postId: _id,
+          userId: loggedInUser._id,
+        }),
+      });
+
+      if (res.ok) {
+        setIsLiked(true);
+        setLikeCount((prev) => prev + 1);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleUnlike = async () => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/unlike`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          postId: _id,
+          userId: loggedInUser._id,
+        }),
+      });
+
+      if (res.ok) {
+        setIsLiked(false);
+        setLikeCount((prev) => prev - 1);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleBookmark = async () => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/bookmark`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          postId: _id,
+          userId: loggedInUser._id,
+        }),
+      });
+
+      if (res.ok) {
+        setIsBookmarked(true);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleUnbookmark = async () => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/unbookmark`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          postId: _id,
+          userId: loggedInUser._id,
+        }),
+      });
+
+      if (res.ok) {
+        setIsBookmarked(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const removeImage = () => {
     setEditImage(null);
@@ -80,27 +227,37 @@ const handleImageChange = async (e) => {
             </h3>
 
             <div className="flex items-center space-x-1">
-              {/* EDIT */}
-              <Tooltip title="Edit">
-                <IconButton
-                  size="small"
-                  onClick={() => setIsEditing(true)}
-                  className="!text-zinc-400 hover:!text-sky-500"
-                >
-                  <EditIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-
+              {loggedInUser._id === p.userId ? (
+                <>
              
-              <Tooltip title="Delete">
-                <IconButton
-                  size="small"
-                  onClick={() => onDelete(_id)}
-                  className="!text-zinc-400 hover:!text-rose-500"
+                  <Tooltip title="Edit">
+                    <IconButton
+                      size="small"
+                      onClick={() => setIsEditing(true)}
+                      className="!text-zinc-400 hover:!text-sky-500"
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+
+                  <Tooltip title="Delete">
+                    <IconButton
+                      size="small"
+                      onClick={() => onDelete(_id)}
+                      className="!text-zinc-400 hover:!text-rose-500"
+                    >
+                      <DeleteOutlineIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              ) : (
+                <button
+                  onClick={isFollowing ? handleUnfollow : handleFollow}
+                  className={`follow-btn ${isFollowing ? "following" : ""}`}
                 >
-                  <DeleteOutlineIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
+                  {isFollowing ? "Unfollow" : "Follow"}
+                </button>
+              )}
             </div>
           </div>
 
@@ -117,11 +274,33 @@ const handleImageChange = async (e) => {
             fontSize="small"
           />
           <RepeatIcon className="post__footer__icon" fontSize="small" />
-          <FavoriteBorderIcon className="post__footer__icon" fontSize="small" />
-          <PublishIcon className="post__footer__icon" fontSize="small" />
+
+          <div className="flex items-center space-x-1 gp-btw">
+            <FavoriteBorderIcon
+              onClick={isLiked ? handleUnlike : handleLike}
+              className={`post__footer__icon ${isLiked ? "liked" : ""}`}
+              fontSize="small"
+            />
+            <span>{likeCount}</span>
+          </div>
+
+          <div className="flex items-center space-x-1">
+            {isBookmarked ? (
+              <BookmarkIcon
+                onClick={handleUnbookmark}
+                className="post__footer__icon bookmarked"
+                fontSize="small"
+              />
+            ) : (
+              <BookmarkBorderIcon
+                onClick={handleBookmark}
+                className="post__footer__icon"
+                fontSize="small"
+              />
+            )}
+          </div>
         </div>
 
-    
         {isEditing && (
           <div className="modal-overlay" onClick={() => setIsEditing(false)}>
             <div
@@ -172,7 +351,6 @@ const handleImageChange = async (e) => {
                     />
                   </label>
                 </div>
-
               </div>
 
               <div className="modal-footer">

@@ -16,6 +16,7 @@ import Lists from "./Pages/Lists/Lists"
 import Profile from "./Pages/Profile/Profile"
 import More from "./Pages/More/More.js"
 import { UserauthcontextProvider } from "./context/UserAuthContext.js";
+import SocialDashboard from "./Pages/Community/Community.js";
 
 function App() {
   return (
@@ -29,11 +30,13 @@ function App() {
             <Route path="/home" element={<ProtectedRoute><Home/></ProtectedRoute>}>
                <Route index  element={<Feed />} /> 
                <Route path="explore" element={<Explore/>}/>
+              
                <Route path="notifications" element={<Notifications/>}/>
-               <Route path="messages" element={<Messages/>}/>
+               {/* <Route path="messages" element={<Messages/>}/> */}
                <Route path="bookmarks" element={<Bookmarks/>}/>
                <Route path="lists" element={<Lists/>}/>
                <Route path="profile" element={<Profile/>}/>
+             <Route path="connections" element={<SocialDashboard/>}/>
                <Route path="more" element={<More/>}/>
             </Route>
             <Route path="/login" element={<Login/>}/>

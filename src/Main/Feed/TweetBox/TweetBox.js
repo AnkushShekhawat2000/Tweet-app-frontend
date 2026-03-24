@@ -7,17 +7,19 @@ import { useUserauth } from "../../../context/UserAuthContext";
 import useLoggedInUser from "../../../hooks/useLoggedInUser";
 
 const TweetBox = ({ fetchPost }) => {
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
   const [post, setPost] = useState("");
   const [imageURL, setImageURL] = useState("");
   const [isLoading, setIsLoading] = useState("");
   const { user } = useUserauth();
   const [loggedInUser] = useLoggedInUser();
   const email = user?.email;
+  const userId = loggedInUser?._id;
   const userProfilepic = loggedInUser?.profilePhoto
     ? loggedInUser.profilePhoto
     : user && user.photoURL;
+
+
+
 
   function handleUploadImage(e) {
     setIsLoading(true);
@@ -67,6 +69,7 @@ const TweetBox = ({ fetchPost }) => {
       username: finalUsername,
       name: finalName,
       email: email,
+      userId
     };
 
     const res = await fetch(

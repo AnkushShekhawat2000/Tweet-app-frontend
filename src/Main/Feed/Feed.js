@@ -8,16 +8,32 @@ import useLoggedInUser from "../../hooks/useLoggedInUser.js";
 const Feed = () => {
   const [posts, setPosts] = useState([]);
   const [loggedInUser] = useLoggedInUser();
-  
+
+
   async function fetchPost() {
-  
-    fetch(`${process.env.REACT_APP_BASE_URL}/get-all-posts`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setPosts(data);
-      });
-  }
+    if (!loggedInUser?._id) {
+      console.log("User Id not available yet");
+      return;
+    }
+
+  fetch(`${process.env.REACT_APP_BASE_URL}/get-all-posts`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      userId: loggedInUser?._id,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+      setPosts(data);
+    });
+}
+
+
+
 
   const handleDelete = async (id) => {
     try {
@@ -46,9 +62,14 @@ const Feed = () => {
       alert("Something went wrong");
     }
   };
+
+
   useEffect(() => {
-    fetchPost();
-  }, []);
+  if (!loggedInUser?._id) return;
+
+  fetchPost();
+}, [loggedInUser]);
+
 
   const handleUpdate = async (updatedPost) => {
     
@@ -87,7 +108,7 @@ const Feed = () => {
       <div className="feed__header"></div>
       <TweetBox fetchPost={fetchPost} />
       <div className="post-container">
-        {posts.map((p) => (
+        {posts.length > 0 && posts.map((p) => (
           <Post
             key={p._id}
             p={p}
