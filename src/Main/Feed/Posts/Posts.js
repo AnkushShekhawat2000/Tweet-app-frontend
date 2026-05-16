@@ -212,54 +212,65 @@ const Post = ({ p, onDelete, onUpdate }) => {
 
   return (
     <div className="post">
-      <div className="post_avatar">
-        <Avatar src={profilePhoto} />
+      
+      <div className="avtar-icons">
+        <div className="profile-info">
+            <div className="post_avatar">
+              <Avatar src={profilePhoto} />
+            </div>
+
+            <div className="post__headerText">
+              <h3>
+                {name}{" "}
+                <span className="post__headerSpecial">
+                  <VerifiedUserIcon className="post_badge" /> @{username}
+                </span>
+              </h3>
+            </div>
+        </div>
+       
+        <div className="flex items-center space-x-1">
+          {loggedInUser._id === p.userId ? (
+            <>
+          
+              <Tooltip title="Edit">
+                <IconButton
+                  size="small"
+                  onClick={() => setIsEditing(true)}
+                  className="!text-zinc-400 hover:!text-sky-500"
+                >
+                  <EditIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip title="Delete">
+                <IconButton
+                  size="small"
+                  onClick={() => onDelete(_id)}
+                  className="!text-zinc-400 hover:!text-rose-500"
+                >
+                  <DeleteOutlineIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            </>
+          ) : (
+            <button
+              onClick={isFollowing ? handleUnfollow : handleFollow}
+              className={`follow-btn ${isFollowing ? "following" : ""}`}
+            >
+              {isFollowing ? "Unfollow" : "Follow"}
+            </button>
+          )}
+        </div>
       </div>
+      
+
+
+
 
       <div className="post__body">
         <div className="post_header">
-          <div className="post__headerText">
-            <h3>
-              {name}{" "}
-              <span className="post__headerSpecial">
-                <VerifiedUserIcon className="post_badge" /> @{username}
-              </span>
-            </h3>
-
-            <div className="flex items-center space-x-1">
-              {loggedInUser._id === p.userId ? (
-                <>
-             
-                  <Tooltip title="Edit">
-                    <IconButton
-                      size="small"
-                      onClick={() => setIsEditing(true)}
-                      className="!text-zinc-400 hover:!text-sky-500"
-                    >
-                      <EditIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-
-                  <Tooltip title="Delete">
-                    <IconButton
-                      size="small"
-                      onClick={() => onDelete(_id)}
-                      className="!text-zinc-400 hover:!text-rose-500"
-                    >
-                      <DeleteOutlineIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                </>
-              ) : (
-                <button
-                  onClick={isFollowing ? handleUnfollow : handleFollow}
-                  className={`follow-btn ${isFollowing ? "following" : ""}`}
-                >
-                  {isFollowing ? "Unfollow" : "Follow"}
-                </button>
-              )}
-            </div>
-          </div>
+         
 
           <div className="post__headerDescription">
             <p>{postBody}</p>
